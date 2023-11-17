@@ -1,10 +1,3 @@
-name = "discordhook"
-main = "index.js"
+name = "discord-mailbox"
+main = "src/index.ts"
 compatibility_date = "2023-09-05"
-
-[vars]
-# The necessary secrets are:
-# - DISCORD_WEBHOOK_URL
-# You can set this to forward to an address as well
-# - FORWARD_TO_ADDRESS
-

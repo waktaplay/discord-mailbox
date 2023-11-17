@@ -1,16 +1,27 @@
 {
-  "name": "cloudflare-worker-emails-to-discord",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "discord-mailbox",
+  "version": "1.0.1",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "wrangler dev"
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "lint": "gts lint",
+    "clean": "gts clean",
+    "fix": "gts fix"
   },
-  "author": "",
+  "author": "Ayaan <minsu.kim@feather-it.com>",
   "license": "ISC",
   "dependencies": {
+    "@types/html-to-text": "^9.0.4",
     "html-to-text": "^9.0.4",
-    "postal-mime": "^1.0.13",
+    "postal-mime": "^2.0.1",
+    "realm-web": "^2.0.0",
     "wrangler": "^3.6.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231025.0",
+    "@types/node": "20.8.2",
+    "gts": "^5.2.0",
+    "typescript": "^5.2.2"
   }
 }
