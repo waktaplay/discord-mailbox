@@ -7,7 +7,7 @@ import { ExecutionContext, ForwardableEmailMessage as EmailMessage } from "@clou
 
 export interface Env {
     MAIL_REALM_APPID: string
-    MAIL_RELAM_TOKEN: string
+    MAIL_REALM_TOKEN: string
     FORWARD_TO_ADDRESS?: string
     
     DISCORD_BOT_TOKEN: string

@@ -38,7 +38,7 @@ function createIdKey(length: number = 13) {
 
 export async function createTicket(email: extendedEmail, env: Env) {
     App = App || new Realm.App(env.MAIL_REALM_APPID);
-    const credentials = Realm.Credentials.apiKey(env.MAIL_RELAM_TOKEN);
+    const credentials = Realm.Credentials.apiKey(env.MAIL_REALM_TOKEN);
 
     const user = await App.logIn(credentials);
     const client = user.mongoClient('waktaplay-internal');
