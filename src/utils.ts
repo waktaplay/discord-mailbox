@@ -19,7 +19,7 @@ interface extendedEmail extends Email {
     content: string | undefined
 }
 
-let App: Realm.App;
+let app: Realm.App;
 
 function createIdKey(length: number = 13) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -37,11 +37,11 @@ function createIdKey(length: number = 13) {
 }
 
 export async function createTicket(email: extendedEmail, env: Env) {
-    App = App || new Realm.App(env.MAIL_REALM_APPID);
+    app = app || new Realm.App(env.MAIL_REALM_APPID);
     const credentials = Realm.Credentials.apiKey(env.MAIL_REALM_TOKEN);
 
-    const user = await App.logIn(credentials);
-    const client = user.mongoClient('waktaplay-internal');
+    const user = await app.logIn(credentials);
+    const client = user.mongoClient('mongodb-atlas');
 
     const collection = client.db('waktaplay').collection<MailBox>('mailbox');
 

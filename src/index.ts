@@ -107,6 +107,9 @@ export default {
         const createPost = await fetch(`https://discord.com/api/v10/channels/1175040641470836746/threads`, {
             method: "POST",
             body: formData,
+            headers: {
+                "Authorization": "Bot " + env.DISCORD_BOT_TOKEN
+            }
         })
 
         if (!createPost.ok) {
