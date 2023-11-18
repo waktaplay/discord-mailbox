@@ -46,7 +46,7 @@ export default {
 
         // create embed
         const emailText: string | undefined = email.text || email.html && convert(email.html) || undefined
-        if (!emailText) return
+        if (!emailText) return message.setReject("Invalid email payload");
 
         const messageBody: DiscordMessage = {
             embeds: [
