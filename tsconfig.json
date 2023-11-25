@@ -8,5 +8,5 @@
     "src/**/*.ts",
     "test/**/*.ts"
   ],
-  "types": ["@cloudflare/workers-types"]
+  "types": ["@cloudflare/workers-types/2023-09-05"]
 }
