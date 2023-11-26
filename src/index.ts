@@ -45,10 +45,9 @@ export default {
       const ticket = await dbService.getOriginalTicket(ticketId);
       if (!ticket) return message.setReject('Invalid email payload');
 
-      const formData = mailBoxService.generateRequestBody(
+      const formData = mailBoxService.generateMessageRequestBody(
         email,
         emailText,
-        ticket.id,
         message
       );
 
