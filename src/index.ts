@@ -47,7 +47,9 @@ export default {
 
       const formData = mailBoxService.generateMessageRequestBody(
         email,
-        emailText,
+        emailText.split(
+          '## 회신을 보내실 경우 이 줄 위에 내용을 입력해 주세요 ##'
+        )[0],
         message
       );
 

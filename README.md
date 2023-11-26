@@ -1,7 +1,9 @@
 # Cloudflare Worker Emails to Discord
+
 Use Email Workers to forward the emails you receive to a discord webhook! This handles respecting Discord's various embed limits, trimming if necessary, and attaching email as an attachment.
 
 # License
+
 Note this uses the postal-mime library which is AGPL.
 It's the only decent browser/working in Cloudflare Workers (not dependent on Node) email parsing library that I could find.
 For more information, please refer LICENSE file.
@@ -10,9 +12,9 @@ For more information, please refer LICENSE file.
 
 Any emails over the discord embed description size limit will be trimmed, and the full contents uploaded as files.
 
-The file will still be trimmed (and the name will reflect that, email-trimmed.txt), if it is over 8MB, the default upload limit. 
+The file will still be trimmed (and the name will reflect that, email-trimmed.txt), if it is over 8MB, the default upload limit.
 
-If you have a boosted server, Level 2 (50MB) or Level 3 (100MB), you can change that constant in the code to not unnecessarily trim files until they hit your limit. 
+If you have a boosted server, Level 2 (50MB) or Level 3 (100MB), you can change that constant in the code to not unnecessarily trim files until they hit your limit.
 
 Note that the current limit of Cloudflare's Postmaster (inbound email service) is 25MB.
 
@@ -24,4 +26,4 @@ It will still forward your email without issue if you have that enabled, as it t
 
 # Example of how emails look like in Discord
 
-![Picture of Discord Email Embed](docs/screenshot.png "Email Discord Embed")
+![Picture of Discord Email Embed](docs/screenshot.png 'Email Discord Embed')

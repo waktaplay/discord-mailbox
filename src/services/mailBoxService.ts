@@ -104,7 +104,7 @@ export class MailBoxService {
   public generateMessageRequestBody(
     email: Email,
     emailText: string,
-    message: EmailMessage,
+    message: EmailMessage
   ) {
     const formData = new FormData();
 
@@ -123,8 +123,7 @@ export class MailBoxService {
                 : emailText,
             author: {
               name: `${
-                this._trimToLimit(email.from.name, 100) ||
-                '(발신자 정보 없음)'
+                this._trimToLimit(email.from.name, 100) || '(발신자 정보 없음)'
               }${email.from.name.length > 64 ? '\n' : ' '}<${
                 this._trimToLimit(email.from.address, 100) || '(알 수 없음)'
               }>`,
