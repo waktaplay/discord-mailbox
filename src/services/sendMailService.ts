@@ -108,13 +108,11 @@ export class SendMailService {
             TemplateLanguage: true,
             Variables: {
               ticket_no: data.id,
-              send_date: new Date().toLocaleString('ko-KR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-              }),
+              send_date: new Intl.DateTimeFormat('ko-KR', {
+                dateStyle: 'long',
+                timeStyle: 'short',
+                timeZone: 'Asia/Seoul',
+              }).format(new Date()),
             },
           },
         ],
