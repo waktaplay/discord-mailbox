@@ -80,7 +80,7 @@ export default {
       const appliedTags: string[] = [];
 
       // 어떤 곳으로 문의가 온건지 분기
-      if (message.to.endsWith('@spacewak.info')) {
+      if (message.to.endsWith('@spacewak.net')) {
         appliedTags.push('1175040985584107571'); // 스페이스왁 태그
       } else if (
         message.to.endsWith('@waktaplay.com') ||
