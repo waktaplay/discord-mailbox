@@ -1,0 +1,36 @@
+{
+	"name": "discord-mailbox",
+	"main": "src/workers.ts",
+	"compatibility_date": "2025-02-16",
+	"observability": {
+		"enabled": true
+	},
+	"placement": {
+	  	"mode": "smart"
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "discord-mailbox",
+			"database_id": "89e3aa96-f8d6-43b1-9421-0168819193e6"
+		}
+	],
+	"vars": {
+		"FORWARD_TO_ADDRESS": "waktaplay@naver.com",
+
+		"EMAIL_PREFIX": "SpaceWak",
+
+		"TLD_TAG": {},
+		"ADDRESS_TAG": {
+			"support@": "1175042028095164416",
+			"apply@": "1175041484756627526"
+		},
+
+		"DISCORD_CLIENT_ID": "1176019306014846986",
+		"DISCORD_GUILD_ID": "1088840877113352193",
+		"DISCORD_CHANNEL_ID": "1175040641470836746",
+		
+		"DISCORD_EMBED_LIMIT": 4096,
+		"DISCORD_FILE_LIMIT": 8000000
+	}
+}
