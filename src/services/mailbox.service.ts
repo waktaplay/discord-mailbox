@@ -71,7 +71,7 @@ export class MailBoxService {
 							},
 						},
 					],
-					attachments: attachmentFile ? [{ name: attachmentFile, description: 'Original email payload' }] : [],
+					attachments: attachmentFile ? [{ id: 0, filename: attachmentFile, description: 'Original email payload' }] : [],
 				},
 				applied_tags: appliedTags,
 			}),
@@ -120,7 +120,7 @@ export class MailBoxService {
 						},
 					},
 				],
-				attachments: attachmentFile ? [{ name: attachmentFile, description: 'Original email payload' }] : [],
+				attachments: attachmentFile ? [{ id: 0, filename: attachmentFile, description: 'Original email payload' }] : [],
 			}),
 		);
 
