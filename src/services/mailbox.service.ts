@@ -32,6 +32,22 @@ export class MailBoxService {
 	public generateRequestBody(email: Email, emailText: string, ticketId: string, message: ForwardableEmailMessage, appliedTags?: string[]) {
 		const formData = new FormData();
 
+		let attachmentFile = '';
+
+		if (emailText.length > this.env.DISCORD_EMBED_LIMIT) {
+			const newTextBlob = new Blob([emailText], {
+				type: 'text/plain',
+			});
+
+			if (newTextBlob.size < this.env.DISCORD_FILE_LIMIT) {
+				attachmentFile = 'email.txt';
+				formData.append('files[0]', newTextBlob, 'email.txt');
+			} else {
+				attachmentFile = 'email-trimmed.txt';
+				formData.append('files[0]', newTextBlob.slice(0, this.env.DISCORD_FILE_LIMIT, 'text/plain'), 'email-trimmed.txt');
+			}
+		}
+
 		formData.append(
 			'payload_json',
 			JSON.stringify({
@@ -55,10 +71,19 @@ export class MailBoxService {
 							},
 						},
 					],
+					attachments: attachmentFile ? [{ name: attachmentFile, description: 'Original email payload' }] : [],
 				},
-				appliedTags: appliedTags,
+				applied_tags: appliedTags,
 			}),
 		);
+
+		return formData;
+	}
+
+	public generateMessageRequestBody(email: Email, emailText: string, message: ForwardableEmailMessage) {
+		const formData = new FormData();
+
+		let attachmentFile = '';
 
 		if (emailText.length > this.env.DISCORD_EMBED_LIMIT) {
 			const newTextBlob = new Blob([emailText], {
@@ -66,17 +91,13 @@ export class MailBoxService {
 			});
 
 			if (newTextBlob.size < this.env.DISCORD_FILE_LIMIT) {
+				attachmentFile = 'email.txt';
 				formData.append('files[0]', newTextBlob, 'email.txt');
 			} else {
+				attachmentFile = 'email-trimmed.txt';
 				formData.append('files[0]', newTextBlob.slice(0, this.env.DISCORD_FILE_LIMIT, 'text/plain'), 'email-trimmed.txt');
 			}
 		}
-
-		return formData;
-	}
-
-	public generateMessageRequestBody(email: Email, emailText: string, message: ForwardableEmailMessage) {
-		const formData = new FormData();
 
 		formData.append(
 			'payload_json',
@@ -99,20 +120,9 @@ export class MailBoxService {
 						},
 					},
 				],
+				attachments: attachmentFile ? [{ name: attachmentFile, description: 'Original email payload' }] : [],
 			}),
 		);
-
-		if (emailText.length > this.env.DISCORD_EMBED_LIMIT) {
-			const newTextBlob = new Blob([emailText], {
-				type: 'text/plain',
-			});
-
-			if (newTextBlob.size < this.env.DISCORD_FILE_LIMIT) {
-				formData.append('files[0]', newTextBlob, 'email.txt');
-			} else {
-				formData.append('files[0]', newTextBlob.slice(0, this.env.DISCORD_FILE_LIMIT, 'text/plain'), 'email-trimmed.txt');
-			}
-		}
 
 		return formData;
 	}

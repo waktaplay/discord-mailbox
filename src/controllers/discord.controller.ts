@@ -60,6 +60,12 @@ router.get(
 	defineEventHandler(async (e) => {
 		const c = e.context as H3EventContextWithCloudflare;
 
+		// Database Initialisation
+		await c.cloudflare.env.DB.prepare(
+			'CREATE TABLE IF NOT EXISTS Tickets (Id TEXT PRIMARY KEY, ThreadId TEXT, Subject TEXT, Author TEXT, Receiver TEXT)',
+		).run();
+
+		// Discord Command Registration
 		discordService.init(c.cloudflare.env);
 		await discordService.registerCommands();
 

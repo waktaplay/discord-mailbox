@@ -4,12 +4,22 @@
  * Share command metadata from a common spot to be used for both runtime and registration.
  */
 
-import { APIInteraction, InteractionResponseType, ComponentType, APIModalInteractionResponse } from 'discord-api-types/v10';
+import { APIInteraction, InteractionResponseType, MessageFlags, ComponentType, APIInteractionResponse } from 'discord-api-types/v10';
 
 export const replyCommand = {
 	name: 'reply',
 	description: '메일 답변을 전송합니다.',
-	execute: async (_interaction: APIInteraction, _env: Env): Promise<APIModalInteractionResponse> => {
+	execute: async (interaction: APIInteraction, env: Env): Promise<APIInteractionResponse> => {
+		if (!interaction.channel?.name?.split('#')[1]?.split(':')[0]) {
+			return {
+				type: InteractionResponseType.ChannelMessageWithSource,
+				data: {
+					content: ':warning: 메일함 채널이 아닙니다.',
+					flags: MessageFlags.Ephemeral,
+				},
+			};
+		}
+
 		return {
 			type: InteractionResponseType.Modal,
 			data: {

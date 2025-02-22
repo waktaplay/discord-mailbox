@@ -54,7 +54,7 @@ export class SendMailService {
                         <div dir="auto" style="color: #2b2e2f; line-height: 22px; margin: 15px 0;">
                           <p dir="ltr" style="color: #2b2e2f; line-height: 22px; margin: 15px 0;">고객님의
                             문의(#{{ticket_no}})가 성공적으로 접수되었습니다.<br />빠른 시간 내에 답변 드리겠습니다.</p>
-                          <p dir="ltr" style="color: #2b2e2f; line-height: 22px; margin: 15px 0;">스페이스왁 서비스를 이용해 주셔서
+                          <p dir="ltr" style="color: #2b2e2f; line-height: 22px; margin: 15px 0;">저희 서비스를 이용해 주셔서
                             감사합니다.</p>
                           <p dir="ltr"></p>
                           <p dir="ltr" style="color: #b5b5b5;">이 메시지는 문의 접수 완료시에 안내되는 자동화 메시지입니다. 추가하실 내용이 있으시면 답장으로 편하게
@@ -72,9 +72,7 @@ export class SendMailService {
     
       <div style="color: #9e9e9e; margin: 10px 0 14px 0; padding-top: 10px; border-top: 1px solid #eeeeee;">
         This email delivered by
-        <a href="http://www.cloudflare.com" style="color: black;" target="_blank">
-          <span class="il">Cloudflare</span>
-        </a>
+        <a href="http://www.cloudflare.com" style="color: black;" target="_blank"><span class="il">Cloudflare</span></a>
       </div>
     </div>
   `;
@@ -114,7 +112,7 @@ export class SendMailService {
                       <td valign="top" style="padding: 0 15px 0 15px; width: 40px;">
                         <img width="40" height="40" alt=""
                           style="height: auto; line-height: 100%; outline: none; text-decoration: none; border-radius: 5px;"
-                          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAAAAACreq1xAAAA6UlEQVR4Ae3XBWKEQAxA0d7/jAuLu7unruiQ1PMP8IAx4EYijkEGGWSQQQa/FDTiZpj6yldoQLWEp8ZIJgCtEV6rFTRoTPC2VkaC1wHelyPBGD5moEB5nIE5CrRh1ogCI5inY8B0AbToQfpHpp8U+mVDv7Dptx794UB/fNEfsPhXwP9566mWGwSupdKAZtLBU11iokG7hnfVNgpUSphVKudBa4CFBuss6Eyw2OSIg3NvLoqC2girjdoJsIGNGnEwhM1CUVAetsFBFgQD2CkQBNs9sBUDFdhNEQLdfdDl/xQGGWSQQQb/O3gLsljx5kzaDnoAAAAASUVORK5CYII=" data-bit="iit" />
+                          src="{{manager_profile}}" data-bit="iit" />
                       </td>
                       <td width="100%" style="padding: 0; margin: 0;" valign="top">
                         <p style="font-size: 15px; line-height: 18px; margin-bottom: 0; margin-top: 0; padding: 0; color: #1b1d1e;"
@@ -137,11 +135,9 @@ export class SendMailService {
 
       <div style="color: #9e9e9e; margin: 10px 0 14px 0; padding-top: 10px; border-top: 1px solid #eeeeee;">
         This email delivered by
-        <a href="hhttps://www.mailgun.com" style="color: black;" target="_blank">
-          <span class="il">Sinch Mailgun</span>
-        </a> and <a href="http://www.cloudflare.com" style="color: black;" target="_blank">
-          <span class="il">Cloudflare</span>
-        </a>
+        <a href="https://resend.com" style="color: black;" target="_blank"><span class="il">Resend</span></a>
+        and
+        <a href="http://www.cloudflare.com" style="color: black;" target="_blank"><span class="il">Cloudflare</span></a>
       </div>
     </div>
   `;
@@ -166,6 +162,7 @@ export class SendMailService {
 
 				// prettier-ignore
 				html: this.responseTemplate
+          .replaceAll('{{manager_profile}}', data.from.avatar)
           .replaceAll('{{manager_name}}', data.from.name)
           .replaceAll('{{manager_team}}', this.env.EMAIL_PREFIX)
           .replaceAll('{{send_date}}', new Intl.DateTimeFormat('ko-KR', {
@@ -177,7 +174,7 @@ export class SendMailService {
 			}),
 		});
 
-		console.log(await response.json());
+		console.log(`[SendMailService] ${await response.text()}`);
 	}
 
 	public async replyMail(message: ForwardableEmailMessage, data: MailParamsBase) {

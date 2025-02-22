@@ -10,6 +10,7 @@ export interface MailParams extends MailParamsBase {
 
 	from: {
 		name: string;
+		avatar: string;
 		address: string;
 	};
 	to: {

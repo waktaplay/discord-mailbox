@@ -12,6 +12,7 @@ export const email = async (message: ForwardableEmailMessage, env: Env) => {
 	const sendMailService = new SendMailService(env);
 
 	if (env.FORWARD_TO_ADDRESS) {
+		console.log(`[Email Workers] Forwarding ${message.headers.get('Message-ID')} to -> ${env.FORWARD_TO_ADDRESS}`);
 		await message.forward(env.FORWARD_TO_ADDRESS);
 	}
 
@@ -39,7 +40,9 @@ const handleReplyEmail = async (
 
 	mailBoxService: MailBoxService,
 ) => {
-	const ticketId = email.subject?.split(`[${env.EMAIL_PREFIX}] #`)[1].split(':')[0].trim();
+	if (!email.subject) return message.setReject('Invalid email payload');
+
+	const ticketId = email.subject.split(`[${env.EMAIL_PREFIX}] #`)[1].split(':')[0].trim();
 	const ticket = await env.DB.prepare('SELECT * FROM Tickets WHERE Id = ?').bind(ticketId).first<MailBox>();
 	if (!ticket) return message.setReject('Invalid email payload');
 
@@ -57,11 +60,10 @@ const handleReplyEmail = async (
 		},
 	});
 
-	console.log('Discord Response:', await sendUpdateMessage.json());
+	console.log(`[Reply Handler] Discord Response -> ${await sendUpdateMessage.text()}`);
 
 	if (!sendUpdateMessage.ok) {
-		console.error('Discord Notification Failed');
-		console.error('Error Message:', sendUpdateMessage.status, sendUpdateMessage.statusText);
+		console.error(`[Reply Handler] Discord Notification Failed -> (${sendUpdateMessage.status}) ${sendUpdateMessage.statusText}`);
 	}
 };
 
@@ -88,17 +90,16 @@ const handleNewEmail = async (
 	});
 
 	const postResponse = await createNewPost.json<APIChannelBase<ChannelType.PublicThread>>();
-	console.log('Discord Response:', postResponse);
+	console.log(`[New Handler] Discord Response: ${JSON.stringify(postResponse)}`);
 
 	if (!createNewPost.ok) {
-		console.error('Discord Notification Failed');
-		console.error('Error Message:', createNewPost.status, createNewPost.statusText);
+		console.error(`[New Handler] Discord Notification Failed: (${createNewPost.status}) ${createNewPost.statusText}`);
 	} else {
-		await env.DB.prepare('INSERT INTO Tickets (Id, ThreadId, Subject, Description, Author, Receiver) VALUES (?, ?, ?, ?, ?, ?)')
-			.bind(ticketId, postResponse.id, email.subject ?? '(제목 없음)', emailText, email.from.address, message.to)
+		await env.DB.prepare('INSERT INTO Tickets (Id, ThreadId, Subject, Author, Receiver) VALUES (?, ?, ?, ?, ?)')
+			.bind(ticketId, postResponse.id, email.subject ?? '(제목 없음)', email.from.address, message.to)
 			.run();
 
-		console.log('Ticket Created:', ticketId);
+		console.log(`[New Handler] Ticket Created: ${ticketId}`);
 
 		const mailParams: MailParamsBase = {
 			id: ticketId,
@@ -112,17 +113,25 @@ const handleNewEmail = async (
 const getAppliedTags = (message: ForwardableEmailMessage, env: Env): string[] => {
 	const appliedTags: string[] = [];
 
+	console.log(`[Tag Handler] Checking for tags in ${message.to}`);
+
 	if (env.TLD_TAG) {
 		const tld = `@${message.to.split('@')[1]}` as keyof typeof env.TLD_TAG;
+		console.log(`[Tag Handler] Checking for TLD Tag: ${tld}`);
+
 		if (env.TLD_TAG[tld]) {
 			appliedTags.push(env.TLD_TAG[tld]);
+			console.log(`[Tag Handler] Found TLD Tag: ${env.TLD_TAG[tld]}`);
 		}
 	}
 
 	if (env.ADDRESS_TAG) {
 		const address = `${message.to.split('@')[0]}@` as keyof typeof env.ADDRESS_TAG;
+		console.log(`[Tag Handler] Checking for Address Tag: ${address}`);
+
 		if (env.ADDRESS_TAG[address]) {
 			appliedTags.push(env.ADDRESS_TAG[address]);
+			console.log(`[Tag Handler] Found Address Tag: ${env.ADDRESS_TAG[address]}`);
 		}
 	}
 
