@@ -40,11 +40,11 @@ const handleReplyEmail = async (
 
 	mailBoxService: MailBoxService,
 ) => {
-	if (!email.subject) return message.setReject('Invalid email payload');
+	if (!email.subject) return message.setReject('티켓 정보를 찾을 수 없습니다. 새로운 메일로 동일한 문의를 이어서 보내보세요.');
 
 	const ticketId = email.subject.split(`[${env.EMAIL_PREFIX}] #`)[1].split(':')[0].trim();
 	const ticket = await env.DB.prepare('SELECT * FROM Tickets WHERE Id = ?').bind(ticketId).first<MailBox>();
-	if (!ticket) return message.setReject('Invalid email payload');
+	if (!ticket) return message.setReject('존재하지 않는 티켓입니다. 오래전에 문의하신 메일의 회신인 경우, 새로운 메일을 보내보세요.');
 
 	const formData = mailBoxService.generateMessageRequestBody(
 		email,
